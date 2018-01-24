@@ -18,7 +18,7 @@ pipeline {
         }
 		stage('Test'){
 			when{
-				environment name: 'runTests', value: true
+				environment name: 'runTests', value: 'true'
 			}
 			steps{
 				//Here we can call our defined test cases, separating them can be beneficial
@@ -27,7 +27,7 @@ pipeline {
 		}
 		stage('Deploy for development'){
 			when{
-				branch 'development'
+				branch 'develop'
 			}
 			steps{
 				//Only deploy to the test server
