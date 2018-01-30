@@ -55,6 +55,8 @@ pipeline {
 						sh 'echo "The pushed version is ${VERSION}"'
 						sh 'git checkout develop'
 						sh 'git pull origin develop'
+						def f = new File('version.txt')
+						
 					}else{
 						sh 'echo "Not creating release"'
 					}
