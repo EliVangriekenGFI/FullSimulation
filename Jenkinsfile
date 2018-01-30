@@ -59,6 +59,8 @@ pipeline {
 						sh 'git stage .'
 						sh 'git commit -m "updated version"'
 						sh 'git push'
+						sh 'git branch release'
+						sh 'git checkout release'
 					}else{
 						sh 'echo "Not creating release"'
 					}
