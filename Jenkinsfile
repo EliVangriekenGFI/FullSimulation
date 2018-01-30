@@ -46,8 +46,14 @@ pipeline {
 				branch 'develop'
 			}
 			steps{
-				sh 'echo push to the release branch'
-				sh 'echo "The pushed version is ${VERSION}"'
+				script{
+					if(${RELEASE}){
+						sh 'echo push to the release branch'
+						sh 'echo "The pushed version is ${VERSION}"'
+					}else{
+						sh 'echo "Not creating release"'
+					}
+				}
 			}
 		}
 		stage('Deploy for release'){
