@@ -46,6 +46,7 @@ pipeline {
 				branch 'develop'
 			}
 			steps{
+				sh 'echo "releaseBeforeScript: ${params.RELEASE}"' 
 				script{
 					echo 'release: ${params.RELEASE}'
 					echo 'version: ${VERSION}'
