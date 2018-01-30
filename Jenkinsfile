@@ -38,7 +38,7 @@ pipeline {
 			input{
 				message "Should we create a release?"
 				parameters{
-					string(name: 'RELEASE', defaultValue: '1.0.0', description: 'What's the version number')
+					string(name: 'RELEASE', defaultValue: '1.0.0', description: 'What is the version number')
 				}
 			}
 			when{
