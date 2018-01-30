@@ -53,6 +53,8 @@ pipeline {
 					if(RELEASE == "true"){
 						sh 'echo push to the release branch'
 						sh 'echo "The pushed version is ${VERSION}"'
+						sh 'git checkout develop'
+						sh 'git pull origin develop'
 					}else{
 						sh 'echo "Not creating release"'
 					}
