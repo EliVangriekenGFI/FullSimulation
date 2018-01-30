@@ -55,8 +55,10 @@ pipeline {
 						sh 'echo "The pushed version is ${VERSION}"'
 						sh 'git checkout develop'
 						sh 'git pull origin develop'
-						def f = new File('version.txt')
-						
+						writeFile file: "version.txt", text: "${VERSION}"
+						sh 'git stage .'
+						sh 'git commit -m "updated version"'
+						sh 'git push'
 					}else{
 						sh 'echo "Not creating release"'
 					}
