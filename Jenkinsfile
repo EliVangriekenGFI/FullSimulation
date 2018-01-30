@@ -25,13 +25,28 @@ pipeline {
 				sh 'echo "Running tests"'
 			}
 		}
-		stage('Deploy for development'){
+		stage('Deploy for develop'){
 			when{
 				branch 'develop'
 			}
 			steps{
 				//Only deploy to the test server
 				sh 'echo "Deploying to the test server"'
+			}
+		}
+		stage('Create release from develop'){
+			input{
+				message "Should we create a release?"
+				parameters{
+					string(name: 'RELEASE', defaultValue: '1.0.0', description: 'What's the version number')
+				}
+			}
+			when{
+				branch 'develop'
+			}
+			steps{
+				sh 'echo push to the release branch'
+				sh 'echo "The pushed version is ${RELEASE}"'
 			}
 		}
 		stage('Deploy for release'){
