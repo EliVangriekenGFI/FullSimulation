@@ -36,9 +36,10 @@ pipeline {
 		}
 		stage('Create release from develop'){
 			input{
-				message "Should we create a release?"
+				message "How should I proceed?"
 				parameters{
-					string(name: 'RELEASE', defaultValue: '1.0.0', description: 'What is the version number')
+					booleanParam(name: 'RELEASE', defaultValue: false, description: 'Should I create a release?')
+					string(name: 'VERSION', defaultValue: '1.0.0', description: 'What is the version number?')
 				}
 			}
 			when{
@@ -46,7 +47,7 @@ pipeline {
 			}
 			steps{
 				sh 'echo push to the release branch'
-				sh 'echo "The pushed version is ${RELEASE}"'
+				sh 'echo "The pushed version is ${VERSION}"'
 			}
 		}
 		stage('Deploy for release'){
