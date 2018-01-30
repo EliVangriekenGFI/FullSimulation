@@ -50,7 +50,7 @@ pipeline {
 				script{
 					print "release: ${RELEASE}"
 					print "version: ${VERSION}"
-					if(params.RELEASE){
+					if(RELEASE == "true"){
 						sh 'echo push to the release branch'
 						sh 'echo "The pushed version is ${VERSION}"'
 					}else{
