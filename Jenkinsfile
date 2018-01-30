@@ -48,9 +48,9 @@ pipeline {
 			steps{
 				sh 'echo "releaseBeforeScript: ${RELEASE}"' 
 				script{
-					echo 'release: {RELEASE}'
+					echo "release: ${params.RELEASE}"
 					echo 'version: ${VERSION}'
-					if(params.RELEASE == true){
+					if(params.RELEASE){
 						sh 'echo push to the release branch'
 						sh 'echo "The pushed version is ${VERSION}"'
 					}else{
