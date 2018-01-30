@@ -47,6 +47,7 @@ pipeline {
 			}
 			steps{
 				script{
+					echo 'release: ${RELEASE}'
 					if(RELEASE == true){
 						sh 'echo push to the release branch'
 						sh 'echo "The pushed version is ${VERSION}"'
