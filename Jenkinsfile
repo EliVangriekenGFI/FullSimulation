@@ -62,6 +62,7 @@ pipeline {
 						sh 'git push'
 						if(CREATE_RELEASE == "true"){
 							sh 'git branch release'
+							sh 'git push --set-upstream origin release'
 						}
 						sh 'git checkout release'
 						sh 'git pull . develop'
@@ -75,12 +76,24 @@ pipeline {
 			}
 		}
 		stage('Deploy for release'){
+			input{
+				message "How should I proceed?"
+				parameters{
+					booleanParam(name: 'FINISH', defaultValue: false, description: 'Should I finish this release?')
+				}
+			}
 			when{
 				branch 'release'
 			}
 			steps{
 				//Deploy to all servers
 				sh 'echo "Deploying to all servers"'
+				script{
+					sh 'git checkout release'
+					sh 'git pull origin release'
+					def version = readFile "version.txt"
+					print "the version is ${version}"
+				}
 			}
 		}
     }
