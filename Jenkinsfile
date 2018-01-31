@@ -93,7 +93,7 @@ pipeline {
 					sh 'git pull origin release'
 					def version = readFile "version.txt"
 					print "the version is ${version}"
-					"git branch".execute()
+					sh "git branch"
 					/*sh 'git checkout master'
 					sh 'git pull origin master'
 					sh 'git pull . release'
