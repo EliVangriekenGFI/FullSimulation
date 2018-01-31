@@ -93,8 +93,8 @@ pipeline {
 					sh 'git pull origin release'
 					def version = readFile "version.txt"
 					print "the version is ${version}"
-					sh 'git checkout origin/master'
-					sh 'git pull . origin/release'
+					sh 'git checkout master'
+					sh 'git pull . release'
 					sh 'git tag v${version}'
 					sh 'git push'
 					sh 'git checkout release'
