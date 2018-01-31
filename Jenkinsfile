@@ -39,6 +39,7 @@ pipeline {
 				message "How should I proceed?"
 				parameters{
 					booleanParam(name: 'RELEASE', defaultValue: false, description: 'Should I create a release?')
+					booleanParam(name: 'CREATE_RELEASE', defaultValue: false, description: 'Is this the first setup?')
 					string(name: 'VERSION', defaultValue: '1.0.0', description: 'What is the version number?')
 				}
 			}
@@ -59,8 +60,14 @@ pipeline {
 						sh 'git stage .'
 						sh 'git commit -m "updated version"'
 						sh 'git push'
-						sh 'git branch release'
+						if(CREATE_RELEASE == "true"){
+							sh 'git branch release'
+						}
 						sh 'git checkout release'
+						sh 'git pull . develop'
+						sh 'git stage .'
+						sh 'git commit -m "created release ${VERSION}"'
+						sg 'git push'
 					}else{
 						sh 'echo "Not creating release"'
 					}
