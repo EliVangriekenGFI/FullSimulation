@@ -58,7 +58,7 @@ pipeline {
 						sh 'git pull origin develop'
 						writeFile file: "version.txt", text: "${VERSION}"
 						sh 'git stage .'
-						sh 'git commit -m "updated version"'
+						sh 'git commit -m "created release ${VERSION}"'
 						sh 'git push'
 						if(CREATE_RELEASE == "true"){
 							sh 'git branch release'
@@ -93,6 +93,11 @@ pipeline {
 					sh 'git pull origin release'
 					def version = readFile "version.txt"
 					print "the version is ${version}"
+					sh 'git checkout origin/master'
+					sh 'git pull . origin/release'
+					sh 'git tag v${version}'
+					sh 'git push'
+					sh 'git checkout release'
 				}
 			}
 		}
