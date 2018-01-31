@@ -95,7 +95,7 @@ pipeline {
 					print "the version is ${version}"
 					sh 'git checkout master'
 					sh 'git pull . release'
-					sh 'git tag v${version}'
+					sh 'git tag version'
 					sh 'git push'
 					sh 'git checkout release'
 				}
