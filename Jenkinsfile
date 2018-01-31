@@ -67,7 +67,7 @@ pipeline {
 						sh 'git pull . develop'
 						sh 'git stage .'
 						sh 'git commit -m "created release ${VERSION}"'
-						sg 'git push'
+						sh 'git push'
 					}else{
 						sh 'echo "Not creating release"'
 					}
