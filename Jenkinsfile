@@ -96,9 +96,9 @@ pipeline {
 					sh 'git checkout master'
 					sh 'git pull origin master'
 					sh 'git pull . release'
-					sh 'git tag "${version}"'
+					sh 'git tag'version
 					sh 'git push'
-					sh 'git push origin "${version}"'
+					sh 'git push origin' version
 					sh 'git checkout release'
 				}
 			}
