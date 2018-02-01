@@ -79,7 +79,7 @@ pipeline {
 			input{
 				message "How should I proceed?"
 				parameters{
-					booleanParam(name: 'FINISH', defaultValue: false, description: 'Should I finish this release?')
+					booleanParam(name: 'FINISH', defaultValue: false, description: 'Should I finish this release for production?')
 				}
 			}
 			when{
@@ -87,19 +87,34 @@ pipeline {
 			}
 			steps{
 				//Deploy to all servers
-				sh 'echo "Deploying to all servers"'
+				sh 'echo "Deploying to test and UAT"'
 				script{
-					sh 'git checkout release'
-					sh 'git pull origin release'
+					if(FINISH == "true"){
+						sh 'git checkout release'
+						sh 'git pull origin release'
+						def version = readFile "version.txt"
+						print "the version is ${version}"
+						sh 'git checkout master'
+						sh 'git pull origin master'
+						sh 'git pull . release'
+						sh "git tag ${version}"
+						sh 'git push'
+						sh "git push origin ${version}"
+						sh 'git checkout release'
+					}else{
+						print "No release for production"
+					}
+				}
+			}
+		}
+		stage('Deploy for production'){
+			when{
+				branch 'master'
+			}
+			steps{
+				script{
 					def version = readFile "version.txt"
-					print "the version is ${version}"
-					sh 'git checkout master'
-					sh 'git pull origin master'
-					sh 'git pull . release'
-					sh "git tag ${version}"
-					sh 'git push'
-					sh "git push origin ${version}"
-					sh 'git checkout release' 
+					print "Deploying version ${version} to production"
 				}
 			}
 		}
