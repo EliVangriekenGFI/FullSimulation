@@ -5,13 +5,16 @@ pipeline {
 		booleanParam(defaultValue: false, description: 'Should I run tests?', name: 'runTests')
 	}
 	
-	environment {
-        CI = 'true'
-    }
+	//environment {
+    //    CI = 'true'
+    //}
 	
     stages {
         stage('Build') {
-            steps {
+            options {
+                timeout(time: 1, unit: 'HOURS') 
+            }
+			steps {
                 //Here we can build the project by calling gradle for example
 				sh 'echo "Building the projects"'
             }
