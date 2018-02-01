@@ -5,15 +5,14 @@ pipeline {
 		booleanParam(defaultValue: false, description: 'Should I run tests?', name: 'runTests')
 	}
 	
-	//environment {
-    //    CI = 'true'
-    //}
-	
     stages {
         stage('Build') {
 			steps {
                 //Here we can build the project by calling gradle for example
 				sh 'echo "Building the projects"'
+				//This ensures that all branches are visible.
+				//Fetch also needs to be configured properly in the git folder of the Jenkins workspace.
+				sh 'git fetch'
             }
         }
 		stage('Test'){
@@ -31,7 +30,10 @@ pipeline {
 			}
 			steps{
 				//Running Jenkins on the develop branch will only deploy on the test server
-				sh 'echo "Deploying to the test server"'
+				script{
+					def version = readFile "version.txt"
+					print "Deploying version ${version} to the test server"
+				}
 			}
 		}
 		stage('Create release from develop'){
@@ -39,7 +41,6 @@ pipeline {
 				message "How should I proceed?"
 				parameters{
 					booleanParam(name: 'RELEASE', defaultValue: false, description: 'Should I create a release?')
-					booleanParam(name: 'CREATE_RELEASE', defaultValue: false, description: 'Is this the first setup?')
 					string(name: 'VERSION', defaultValue: '1.0.0', description: 'What is the version number?')
 				}
 			}
@@ -47,28 +48,19 @@ pipeline {
 				branch 'develop'
 			}
 			steps{
-				sh 'echo "releaseBeforeScript: ${RELEASE}"' 
 				script{
-					print "release: ${RELEASE}"
-					print "version: ${VERSION}"
 					if(RELEASE == "true"){
-						sh 'echo push to the release branch'
-						sh 'echo "The pushed version is ${VERSION}"'
 						sh 'git checkout develop'
 						sh 'git pull origin develop'
 						writeFile file: "version.txt", text: "${VERSION}"
 						sh 'git stage .'
 						sh 'git commit -m "created release ${VERSION}"'
 						sh 'git push'
-						if(CREATE_RELEASE == "true"){
-							sh 'git branch release'
-							sh 'git push --set-upstream origin release'
-						}
 						sh 'git checkout release'
 						sh 'git pull . develop'
 						sh 'git stage .'
-						//sh 'git commit -m "created release ${VERSION}"'
 						sh 'git push'
+						print "Created release version ${VERSION} on the release branch"
 					}else{
 						sh 'echo "Not creating release"'
 					}
@@ -86,6 +78,7 @@ pipeline {
 		}
 		stage('Release for production'){
 			options{
+				//For now set for one minute will be higher for real example, for example 3 days.
 				timeout(time: 1, unit: 'MINUTES')
 			}
 			input{
