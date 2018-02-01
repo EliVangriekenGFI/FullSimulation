@@ -10,9 +10,6 @@ pipeline {
 			steps {
                 //Here we can build the project by calling gradle for example
 				sh 'echo "Building the projects"'
-				//This ensures that all branches are visible.
-				//Fetch also needs to be configured properly in the git folder of the Jenkins workspace.
-				sh 'git fetch'
             }
         }
 		stage('Test'){
@@ -31,6 +28,10 @@ pipeline {
 			steps{
 				//Running Jenkins on the develop branch will only deploy on the test server
 				script{
+					//This ensures that all branches are visible.
+					//Fetch also needs to be configured properly in the git folder of the Jenkins workspace.
+					sh 'git checkout develop'
+					sh 'git fetch'
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to the test server"
 				}
@@ -74,6 +75,11 @@ pipeline {
 			steps{
 				//Running Jenkins on the release branch will deploy to the test and UAT servers.
 				sh 'echo "Deploying to test and UAT"'
+				script{
+					//This ensures that all branches are visible.
+					sh 'git checkout release'
+					sh 'git fetch'
+				}
 			}
 		}
 		stage('Release for production'){
@@ -120,6 +126,9 @@ pipeline {
 			}
 			steps{
 				script{
+					//This ensures that all branches are visible.
+					sh 'git checkout master'
+					sh 'git fetch'
 					//Deploying from master will deploy to the production server.
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to production"
