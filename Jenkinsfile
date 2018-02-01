@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                //Here we can build the project by calling graddle for example
+                //Here we can build the project by calling gradle for example
 				sh 'echo "Building the projects"'
             }
         }
@@ -25,12 +25,12 @@ pipeline {
 				sh 'echo "Running tests"'
 			}
 		}
-		stage('Deploy for develop'){
+		stage('Deploy from develop'){
 			when{
 				branch 'develop'
 			}
 			steps{
-				//Only deploy to the test server
+				//Running Jenkins on the develop branch will only deploy on the test server
 				sh 'echo "Deploying to the test server"'
 			}
 		}
@@ -75,7 +75,19 @@ pipeline {
 				}
 			}
 		}
-		stage('Deploy for release'){
+		stage('Deploy from release'){
+			when{
+				branch 'release'
+			}
+			steps{
+				//Running Jenkins on the release branch will deploy to the test and UAT servers.
+				sh 'echo "Deploying to test and UAT"'
+			}
+		}
+		stage('Release for production'){
+			options{
+				timeout(time: 1, unit: 'MINUTES')
+			}
 			input{
 				message "How should I proceed?"
 				parameters{
@@ -86,14 +98,15 @@ pipeline {
 				branch 'release'
 			}
 			steps{
-				//Deploy to all servers
-				sh 'echo "Deploying to test and UAT"'
+				//The user will be prompted to finish the release for production (push to the master branch).
+				//Depending on the results of the previous step the user might want to decline.
+				//A timeout will ensure that the pipeline will not stay alive forever while waiting on a response of the user.
+				//The release on the master will also be tagged with the version number
 				script{
 					if(FINISH == "true"){
 						sh 'git checkout release'
 						sh 'git pull origin release'
 						def version = readFile "version.txt"
-						print "the version is ${version}"
 						sh 'git checkout master'
 						sh 'git pull origin master'
 						sh 'git pull . release'
@@ -101,18 +114,20 @@ pipeline {
 						sh 'git push'
 						sh "git push origin ${version}"
 						sh 'git checkout release'
+						print "Version ${version} released for production"
 					}else{
 						print "No release for production"
 					}
 				}
 			}
 		}
-		stage('Deploy for production'){
+		stage('Deploy from master'){
 			when{
 				branch 'master'
 			}
 			steps{
 				script{
+					//Deploying from master will deploy to the production server.
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to production"
 				}
