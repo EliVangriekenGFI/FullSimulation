@@ -128,6 +128,7 @@ pipeline {
 				script{
 					//This ensures that all branches are visible.
 					sh 'git checkout master'
+					sh 'git pull origin master'
 					sh 'git fetch'
 					//Deploying from master will deploy to the production server.
 					def version = readFile "version.txt"
