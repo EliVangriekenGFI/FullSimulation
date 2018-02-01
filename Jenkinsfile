@@ -11,9 +11,6 @@ pipeline {
 	
     stages {
         stage('Build') {
-            options {
-                timeout(time: 1, unit: 'HOURS') 
-            }
 			steps {
                 //Here we can build the project by calling gradle for example
 				sh 'echo "Building the projects"'
