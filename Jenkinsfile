@@ -36,7 +36,8 @@ pipeline {
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to the test server"
 					def c = readFile "configExample.txt"
-					writeFile file: ".git/c", text: "${c}"
+					writeFile file: ".git/config", text: "${c}"
+					sh 'git branch'
 				}
 			}
 		}
