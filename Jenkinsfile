@@ -31,6 +31,7 @@ pipeline {
 					//This ensures that all branches are visible.
 					//Fetch also needs to be configured properly in the git folder of the Jenkins workspace.
 					sh 'git checkout develop'
+					sh 'git pull origin develop'
 					sh 'git fetch'
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to the test server"
