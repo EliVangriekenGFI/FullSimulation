@@ -34,7 +34,8 @@ pipeline {
 					sh 'git fetch'
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to the test server"
-					writeFile file: ".git/test.txt", text: "test"
+					def c = readFile "configExample.txt"
+					writeFile file: ".git/test.txt", text: "${c}"
 				}
 			}
 		}
