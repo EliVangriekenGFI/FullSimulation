@@ -9,7 +9,7 @@ pipeline {
     stages {
 		stage('Set up git'){
 			when{
-				environment name : 'configureGit', value 'true'
+				environment name: 'configureGit', value: 'true'
 			}
 			steps{
 				script{
