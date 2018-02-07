@@ -12,8 +12,10 @@ pipeline {
 				environment name : 'configureGit', value 'true'
 			}
 			steps{
-				def c = readFile "configExample.txt"
-				writeFile file: ".git/config", text: "${c}"
+				script{
+					def c = readFile "configExample.txt"
+					writeFile file: ".git/config", text: "${c}"
+				}
 			}
 		}
         stage('Build') {
