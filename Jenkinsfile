@@ -3,7 +3,7 @@ pipeline {
 	
 	parameters {
 		booleanParam(defaultValue: false, description: 'Should I run tests?', name: 'runTests')
-		booleanParam(defaultValue: false, description: 'Should I configure git?, name: 'configureGit')
+		booleanParam(defaultValue: false, description: 'Should I configure git?', name: 'configureGit')
 	}
 	
     stages {
