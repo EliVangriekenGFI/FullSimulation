@@ -3,9 +3,19 @@ pipeline {
 	
 	parameters {
 		booleanParam(defaultValue: false, description: 'Should I run tests?', name: 'runTests')
+		booleanParam(defaultValue: false, description: 'Should I configure git?, name: 'configureGit')
 	}
 	
     stages {
+		stage('Set up git'){
+			when{
+				environment name : 'configureGit', value 'true'
+			}
+			steps{
+				def c = readFile "configExample.txt"
+				writeFile file: ".git/config", text: "${c}"
+			}
+		}
         stage('Build') {
 			steps {
                 //Here we can build the project by calling gradle for example
@@ -35,9 +45,6 @@ pipeline {
 					sh 'git fetch'
 					def version = readFile "version.txt"
 					print "Deploying version ${version} to the test server"
-					def c = readFile "configExample.txt"
-					writeFile file: ".git/config", text: "${c}"
-					sh 'git branch'
 				}
 			}
 		}
