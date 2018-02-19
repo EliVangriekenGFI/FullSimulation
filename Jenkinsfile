@@ -42,7 +42,7 @@ pipeline {
 				sh 'echo "Deploying to test and UAT"'
 				script{
 					env.DEPLOY_ENV = 'UAT';
-					env.DEPLOY_FRONTEND_ADDR = '10.10.10.4';
+					env.DEPLOY_FRONTEND_ADDR = '10.10.10.36';
 				}
 			}
 		}
@@ -55,7 +55,7 @@ pipeline {
 				sh 'echo "Deploying to Production"'
 				script{
 					env.DEPLOY_ENV = 'PROD';
-					env.DEPLOY_FRONTEND_ADDR = '10.10.10.4';
+					env.DEPLOY_FRONTEND_ADDR = '10.10.10.666';
 				}
 			}
 		}
@@ -63,6 +63,17 @@ pipeline {
 			steps{
 				script{
 					echo "Deploy to ${env.DEPLOY_ENV} - ${env.DEPLOY_FRONTEND_ADDR}"
+					
+					/* sh """
+					  mkdir -p tmp/deploy
+					  rm -f tmp/deploy/*
+					  find modules -name be.onesto.*.jar -exec cp {} tmp/deploy \\;
+					  find themes -name onesto*.war -exec cp {} tmp/deploy \\;
+					  scp -r tmp/deploy/* ${serverAddress}
+					  rm -rf tmp/deploy
+
+					  ssh adevleeschauwer@${env.DEPLOY_FRONTEND_ADDR} /opt/liferay/script/install.sh
+					""" */
 				}
 			}
 		}
