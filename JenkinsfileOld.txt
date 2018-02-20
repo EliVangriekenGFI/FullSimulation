@@ -103,7 +103,7 @@ pipeline {
 			input{
 				message "How should I proceed?"
 				parameters{
-					booleanParam(name: 'FINISH', defaultValue: false, description: 'Should I finish this release for production?')
+					booleanParam(name: 'FINISH', defaultValue: false, description: 'Should I deploy to UAT?')
 				}
 			}
 			when{
