@@ -27,7 +27,7 @@ git push --set-upstream origin release/$VERSION
 git checkout develop
 
 # COMMENT LINES BELOW IF YOU BUMP VERSION AT THE END
-echo $VERSION >> `version.txt`
+echo $VERSION >>version.txt
 NEXTVERSION=`./bump-version-drynext.sh`
 ./bump-version.sh $NEXTVERSION
 git commit -am "Bumps version to $NEXTVERSION"
