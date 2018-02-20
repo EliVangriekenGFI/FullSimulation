@@ -69,7 +69,7 @@ pipeline {
 		}
 		stage('Deploy from release - Deploy to Test'){
 			when{
-				branch 'release'
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 			}
 			steps{
 				//Running Jenkins on the release branch will deploy to the test and UAT servers.
@@ -105,13 +105,14 @@ pipeline {
 				}
 			}
 			when{
-				branch 'release'
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 				environment name: 'DEPLOY_UAT', value: 'true'
 			}
 			steps{
 				//Running Jenkins on the release branch will deploy to the test and UAT servers.
 				sh 'echo "Deploying to test"'
 				script{
+					if(DEPLOY_UAT == "true"){
 					env.DEPLOY_ENV = 'UAT';
 					env.DEPLOY_FRONTEND_ADDR = '10.10.10.36';
 					
@@ -127,6 +128,10 @@ pipeline {
 
 					  ssh adevleeschauwer@${env.DEPLOY_FRONTEND_ADDR} /opt/liferay/script/install.sh
 					""" */
+					}else{
+						print "Not deploying to UAT"
+					}
+					
 				}
 			}
 		}
