@@ -22,7 +22,7 @@ git checkout develop
 git flow release start $VERSION
 
 # bump released version to server
-git push
+git push --set-upstream origin release/$VERSION
 
 git checkout develop
 
