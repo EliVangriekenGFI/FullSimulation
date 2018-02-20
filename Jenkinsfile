@@ -69,7 +69,7 @@ pipeline {
 		}
 		stage('Deploy from release - Deploy to Test'){
 			when{
-				branch 'release'
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 			}
 			steps{
 				//Running Jenkins on the release branch will deploy to the test and UAT servers.
@@ -105,7 +105,7 @@ pipeline {
 				}
 			}
 			when{
-				branch 'release'
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 				environment name: 'DEPLOY_UAT', value: 'true'
 			}
 			steps{
@@ -158,7 +158,7 @@ pipeline {
 		}
 		stage('Deploy'){
 			when{
-				expression {BRANCH_NAME ==~ /(develop)/}
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 			}
 			steps{
 				sh 'echo "test"'
