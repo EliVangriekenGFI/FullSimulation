@@ -158,7 +158,7 @@ pipeline {
 		}
 		stage('Deploy'){
 			when{
-				expression {BRANCH_NAME ==~ /(dev+)/}
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 			}
 			steps{
 				sh 'echo "test"'
