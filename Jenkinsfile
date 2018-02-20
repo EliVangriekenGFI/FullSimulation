@@ -105,6 +105,7 @@ pipeline {
 				}
 			}
 			when{
+				expression {BRANCH_NAME ==~ /(release)(\/)(.+)/}
 				environment name: 'DEPLOY_UAT', value: 'true'
 			}
 			steps{
